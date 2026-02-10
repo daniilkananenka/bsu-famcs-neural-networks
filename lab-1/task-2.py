@@ -38,6 +38,8 @@ def run_task_a():
             out = sigmoid(h1 * w[4] + h2 * w[5])
             
             current_error += (target - out) ** 2
+
+        current_error /= 4
         
         if current_error < min_error:
             min_error = current_error
@@ -64,29 +66,29 @@ def run_task_b():
     best_weights = None
     min_error = float('inf')
 
-    # Схема весов: [w1, w2] + Bias (смещение), чтобы дать шанс, хотя это не поможет
     for _ in range(50000):
         w1 = random.uniform(-10, 10)
         w2 = random.uniform(-10, 10)
-        bias = random.uniform(-10, 10)
         
         current_error = 0
         for i1, i2, target in XOR_DATA:
-            # Out = sigmoid(i1*w1 + i2*w2 + bias)
-            val = i1 * w1 + i2 * w2 + bias
+            # Out
+            val = i1 * w1 + i2 * w2
             out = sigmoid(val)
             current_error += (target - out) ** 2
+
+        current_error /= 4
         
         if current_error < min_error:
             min_error = current_error
-            best_weights = [w1, w2, bias]
+            best_weights = [w1, w2]
 
     print(f"Best error (MSE): {min_error:.5f}")
     print("Weights:", [round(x, 3) for x in best_weights])
     print("-" * 20)
     print("Check:")
     for i1, i2, target in XOR_DATA:
-        val = i1 * best_weights[0] + i2 * best_weights[1] + best_weights[2]
+        val = i1 * best_weights[0] + i2 * best_weights[1]
         out = sigmoid(val)
         print(f"[{i1}, {i2}] -> {out:.3f} (Target: {target})")
 
